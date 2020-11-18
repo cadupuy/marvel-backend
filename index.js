@@ -12,7 +12,8 @@ app.use(helmet());
 
 const charactersRoute = require("./routes/characters");
 app.use(charactersRoute);
-
+const characterRoute = require("./routes/character");
+app.use(characterRoute);
 const comicsRoute = require("./routes/comics");
 app.use(comicsRoute);
 
@@ -22,6 +23,6 @@ app.all("*", (req, res) => {
   });
 });
 
-app.listen("3100", (req, res) => {
+app.listen("3001", (req, res) => {
   console.log("START");
 });

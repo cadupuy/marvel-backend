@@ -14,7 +14,7 @@ const hash = md5(
   ts + process.env.MARVEL_PRIVATE_KEY + publicMarvelKey
 ).toString();
 
-router.get("/", async (req, res) => {
+router.get("/comic/:id", async (req, res) => {
   try {
     // Request exemple http://gateway.marvel.com/v1/public/comics?ts=1&apikey=1234&hash=ffd275c5130566a2916217b101f26150
 
