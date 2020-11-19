@@ -15,9 +15,18 @@ const hash = md5(
 ).toString();
 
 router.get("/comics", async (req, res) => {
+  const { title, page } = req.query;
+  let search;
+  if (title !== "") {
+    search = `&titleStartsWith=${title}`;
+  }
+
+  const offset = page * 100 - 100;
+
   try {
     const response = await axios.get(
-      `https://gateway.marvel.com/v1/public/comics?orderBy=title&ts=${ts}&apikey=${publicMarvelKey}&hash=${hash}&limit=100`
+      `https://gateway.marvel.com/v1/public/comics?orderBy=title&ts=${ts}&apikey=${publicMarvelKey}&hash=${hash}&limit=100&offset=${offset}` +
+        search
     );
 
     res.status(200).json(response.data);
@@ -28,10 +37,10 @@ router.get("/comics", async (req, res) => {
   }
 });
 
-router.get("/comic/:id", async (req, res) => {
+router.get("/character/:id/comics", async (req, res) => {
   try {
     const response = await axios.get(
-      `https://gateway.marvel.com/v1/public/comics/${req.params.id}?ts=${ts}&apikey=${publicMarvelKey}&hash=${hash}`
+      `https://gateway.marvel.com/v1/public/characters/${req.params.id}/comics?ts=${ts}&apikey=${publicMarvelKey}&hash=${hash}`
     );
 
     res.status(200).json(response.data);
