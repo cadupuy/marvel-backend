@@ -16,13 +16,23 @@ const hash = md5(
 
 router.get("/comics", async (req, res) => {
   try {
-    // Request exemple http://gateway.marvel.com/v1/public/comics?ts=1&apikey=1234&hash=ffd275c5130566a2916217b101f26150
-
     const response = await axios.get(
-      `https://gateway.marvel.com/v1/public/comics?ts=${ts}&apikey=${publicMarvelKey}&hash=${hash}&limit=100`
+      `https://gateway.marvel.com/v1/public/comics?orderBy=title&ts=${ts}&apikey=${publicMarvelKey}&hash=${hash}&limit=100`
     );
 
-    console.log(response.data);
+    res.status(200).json(response.data);
+  } catch (error) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+});
+
+router.get("/comic/:id", async (req, res) => {
+  try {
+    const response = await axios.get(
+      `https://gateway.marvel.com/v1/public/comics/${req.params.id}?ts=${ts}&apikey=${publicMarvelKey}&hash=${hash}`
+    );
 
     res.status(200).json(response.data);
   } catch (error) {

@@ -12,8 +12,6 @@ app.use(helmet());
 
 const charactersRoute = require("./routes/characters");
 app.use(charactersRoute);
-const characterRoute = require("./routes/character");
-app.use(characterRoute);
 const comicsRoute = require("./routes/comics");
 app.use(comicsRoute);
 
