@@ -36,8 +36,8 @@ router.get("/", async (req, res) => {
     search = `&nameStartsWith=${name}`;
   }
 
-  // console.log(search);
-  const offset = page * 100 - 100;
+  let offset = page * 100 - 100;
+
   try {
     const response = await axios.get(
       `https://gateway.marvel.com/v1/public/characters?orderBy=name&ts=${ts}&apikey=${publicMarvelKey}&hash=${hash}&limit=100&offset=${offset}` +

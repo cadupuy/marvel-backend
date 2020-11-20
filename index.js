@@ -10,10 +10,18 @@ app.use(formidable());
 app.use(cors());
 app.use(helmet());
 
+mongoose.connect("mongodb://localhost/marvel", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+});
+
 const charactersRoute = require("./routes/characters");
 app.use(charactersRoute);
 const comicsRoute = require("./routes/comics");
 app.use(comicsRoute);
+const usersRoute = require("./routes/user");
+app.use(usersRoute);
 
 app.all("*", (req, res) => {
   res.status(404).json({
