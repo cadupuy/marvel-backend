@@ -9,7 +9,7 @@ const timestamp = date.getTime() / 1000;
 const ts = Math.floor(timestamp);
 
 // Creation of Hash using Ts, private Marvel key and public Marvel key
-const publicMarvelKey = "64498682b973ea81107a3d18b89aa258";
+const publicMarvelKey = process.env.MARVEL_PUBLIC_KEY;
 const hash = md5(
   ts + process.env.MARVEL_PRIVATE_KEY + publicMarvelKey
 ).toString();

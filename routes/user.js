@@ -35,7 +35,6 @@ router.post("/user/signup", async (req, res) => {
         res.status(200).json({
           _id: newUser._id,
           email: newUser.email,
-
           username: newUser.username,
           token: newUser.token,
         });
@@ -66,7 +65,6 @@ router.post("/user/login", async (req, res) => {
           _id: userLogin._id,
           account: userLogin.account,
           token: userLogin.token,
-          favorites: user.Login.token,
         });
       } else {
         res.status(401).json({
@@ -85,19 +83,32 @@ router.post("/user/login", async (req, res) => {
   }
 });
 
-router.post("/user/favorites", isAuthenticated, async (req, res) => {
+router.get("/user/favorites", isAuthenticated, async (req, res) => {
   try {
-    const { favoriteCharacters, favoriteComics } = req.fields;
-
-    const user = await User.findOne({ id: req.user.id });
-
-    user.favoriteCharacters = favoriteCharacters;
-    user.favoriteComics = favoriteComics;
-
-    res.status(200).json({
-      favoriteCharacters: user.favoriteCharacters,
-      favoriteComics: user.favoriteComics,
+    res.status(200).json(req.user);
+  } catch (error) {
+    res.status(400).json({
+      message: error.message,
     });
+  }
+});
+
+router.post("/user/favorites/update", isAuthenticated, async (req, res) => {
+  try {
+    const { favoriteCharacter } = req.fields;
+
+    const user = await User.findById(req.user.id);
+    // Checking if character ID is already in our bdd
+    const index = user.favorites.favoriteCharacters.indexOf(favoriteCharacter);
+    if (index !== -1) {
+      user.favorites.favoriteCharacters.splice(index, 1);
+    } else {
+      user.favorites.favoriteCharacters.push(favoriteCharacter);
+    }
+
+    await user.save();
+
+    res.status(200).json(req.user);
   } catch (error) {
     res.status(400).json({
       message: error.message,
