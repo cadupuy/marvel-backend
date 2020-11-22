@@ -99,11 +99,22 @@ router.post("/user/favorites/update", isAuthenticated, async (req, res) => {
 
     const user = await User.findById(req.user.id);
     // Checking if character ID is already in our bdd
-    const index = user.favorites.favoriteCharacters.indexOf(favoriteCharacter);
-    if (index !== -1) {
-      user.favorites.favoriteCharacters.splice(index, 1);
-    } else {
+
+    if (user.favorites.favoriteCharacters.length === 0) {
       user.favorites.favoriteCharacters.push(favoriteCharacter);
+    } else {
+      let isInside = false;
+      for (let i = 0; i < user.favorites.favoriteCharacters.length; i++) {
+        if (
+          user.favorites.favoriteCharacters[i][0].id === favoriteCharacter[0].id
+        ) {
+          user.favorites.favoriteCharacters.splice(i, 1);
+          isInside = true;
+        }
+      }
+      if (!isInside) {
+        user.favorites.favoriteCharacters.push(favoriteCharacter);
+      }
     }
 
     await user.save();
