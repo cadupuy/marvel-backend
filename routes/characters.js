@@ -32,11 +32,13 @@ router.get("/", async (req, res) => {
   const { page, name } = req.query;
 
   let search;
+  let offset;
   if (name !== "") {
     search = `&nameStartsWith=${name}`;
+    offset = 0;
+  } else {
+    offset = page * 100 - 100;
   }
-
-  let offset = page * 100 - 100;
 
   try {
     const response = await axios.get(

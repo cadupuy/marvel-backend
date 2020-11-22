@@ -17,11 +17,13 @@ const hash = md5(
 router.get("/comics", async (req, res) => {
   const { title, page } = req.query;
   let search;
+  let offset;
   if (title !== "") {
     search = `&titleStartsWith=${title}`;
+    offset = 0;
+  } else {
+    offset = page * 100 - 100;
   }
-
-  const offset = page * 100 - 100;
 
   try {
     const response = await axios.get(
